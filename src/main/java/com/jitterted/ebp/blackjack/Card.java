@@ -15,7 +15,7 @@ public class Card {
 
     public int rankValue() {
         if ("JQK".contains(rank)) {
-            return 10;
+            return 11;
         } else if (rank.equals("A")) {
             return 1;
         } else {
