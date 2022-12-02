@@ -20,7 +20,7 @@ class CardTest {
         Card card = new Card("don't care", "Q");
 
         assertThat(card.rankValue())
-                .isEqualTo(10);
+                .isEqualTo(11);
     }
 
     @Test
