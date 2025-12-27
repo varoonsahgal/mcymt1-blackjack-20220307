@@ -14,6 +14,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class Game {
 
     private final Deck deck;
+    private final Scanner scanner;
 
     private final List<Card> dealerHand = new ArrayList<>();
     private final List<Card> playerHand = new ArrayList<>();
@@ -44,6 +45,7 @@ public class Game {
 
     public Game() {
         deck = new Deck();
+        scanner = new Scanner(System.in);
     }
 
     public void initialDeal() {
@@ -99,15 +101,17 @@ public class Game {
     }
 
     public int handValueOf(List<Card> hand) {
-        int handValue = hand
-                .stream()
-                .mapToInt(Card::rankValue)
-                .sum();
-
-        // does the hand contain at least 1 Ace?
-        boolean hasAce = hand
-                .stream()
-                .anyMatch(card -> card.rankValue() == 1);
+        int handValue = 0;
+        boolean hasAce = false;
+        
+        // Single iteration to calculate sum and check for Ace
+        for (Card card : hand) {
+            int rankValue = card.rankValue();
+            handValue += rankValue;
+            if (rankValue == 1) {
+                hasAce = true;
+            }
+        }
 
         // if the total hand value <= 11, then count the Ace as 11 by adding 10
         if (hasAce && handValue < 11) {
@@ -119,7 +123,6 @@ public class Game {
 
     private String inputFromPlayer() {
         System.out.println("[H]it or [S]tand?");
-        Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
 
