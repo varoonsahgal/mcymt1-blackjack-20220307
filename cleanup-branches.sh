@@ -3,7 +3,7 @@
 # Script to delete all branches except main
 # This script requires proper GitHub authentication (gh CLI or git credentials)
 
-set -e
+set -eo pipefail
 
 echo "Fetching all remote branches..."
 git fetch --all

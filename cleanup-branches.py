@@ -32,7 +32,17 @@ def delete_branch(owner, repo, branch_name, token):
     }
     
     response = requests.delete(url, headers=headers)
-    return response.status_code == 204
+    if response.status_code == 204:
+        return True, None
+    else:
+        error_msg = f"Status {response.status_code}"
+        try:
+            error_data = response.json()
+            if 'message' in error_data:
+                error_msg = f"{error_msg}: {error_data['message']}"
+        except:
+            pass
+        return False, error_msg
 
 def main():
     if len(sys.argv) != 4:
@@ -77,11 +87,12 @@ def main():
     for branch_name in branches_to_delete:
         print(f"  Deleting: {branch_name}...", end=" ")
         try:
-            if delete_branch(owner, repo, branch_name, token):
+            success, error = delete_branch(owner, repo, branch_name, token)
+            if success:
                 print("✓ Deleted")
                 deleted += 1
             else:
-                print("✗ Failed")
+                print(f"✗ Failed: {error}")
                 failed += 1
         except Exception as e:
             print(f"✗ Error: {e}")
