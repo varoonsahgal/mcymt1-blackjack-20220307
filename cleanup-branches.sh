@@ -2,6 +2,7 @@
 
 # Script to delete all branches except main
 # This script requires proper GitHub authentication (gh CLI or git credentials)
+# Make executable with: chmod +x cleanup-branches.sh
 
 set -eo pipefail
 

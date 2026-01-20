@@ -40,7 +40,7 @@ def delete_branch(owner, repo, branch_name, token):
             error_data = response.json()
             if 'message' in error_data:
                 error_msg = f"{error_msg}: {error_data['message']}"
-        except:
+        except Exception:
             pass
         return False, error_msg
 
