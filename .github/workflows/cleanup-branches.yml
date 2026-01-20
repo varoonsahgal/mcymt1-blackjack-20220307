@@ -1,0 +1,33 @@
+name: Cleanup Branches
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Delete all branches except main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Fetching all branches..."
+          git fetch --all
+          
+          echo "Listing all remote branches..."
+          git branch -r | grep -v '\->' | sed 's/origin\///' | grep -v '^main$' | while read branch; do
+            echo "Deleting branch: $branch"
+            git push origin --delete "$branch" || echo "Failed to delete $branch"
+          done
+          
+          echo "Branch cleanup completed!"
+          echo "Remaining branches:"
+          git ls-remote --heads origin
