@@ -13,7 +13,7 @@ def get_all_branches(owner, repo, token):
     """Get all branches from the repository"""
     url = f"https://api.github.com/repos/{owner}/{repo}/branches"
     headers = {
-        "Authorization": f"token {token}",
+        "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28"
     }
@@ -26,7 +26,7 @@ def delete_branch(owner, repo, branch_name, token):
     """Delete a branch from the repository"""
     url = f"https://api.github.com/repos/{owner}/{repo}/git/refs/heads/{branch_name}"
     headers = {
-        "Authorization": f"token {token}",
+        "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28"
     }

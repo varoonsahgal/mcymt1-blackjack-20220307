@@ -25,7 +25,9 @@ echo ""
 echo "Deleting branches..."
 git ls-remote --heads origin | awk '{print $2}' | sed 's|refs/heads/||' | grep -v '^main$' | while read branch; do
     echo "Deleting: $branch"
-    git push origin --delete "$branch" 2>&1 || echo "Failed to delete $branch"
+    if ! OUTPUT=$(git push origin --delete "$branch" 2>&1); then
+        echo "Failed to delete $branch: $OUTPUT"
+    fi
 done
 
 echo ""
