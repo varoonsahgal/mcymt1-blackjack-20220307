@@ -22,3 +22,9 @@ target/
 
 # mac
 .DS_store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
