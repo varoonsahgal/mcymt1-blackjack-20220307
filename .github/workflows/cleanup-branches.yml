@@ -15,6 +15,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
       - name: Delete all branches except main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -22,12 +27,18 @@ jobs:
           echo "Fetching all branches..."
           git fetch --all
           
-          echo "Listing all remote branches..."
-          git branch -r | grep -v '\->' | sed 's/origin\///' | grep -v '^main$' | while read branch; do
+          echo "Branches that will be deleted:"
+          git ls-remote --heads origin | awk '{print $2}' | sed 's|refs/heads/||' | grep -v '^main$'
+          
+          echo ""
+          echo "Starting branch deletion..."
+          git ls-remote --heads origin | awk '{print $2}' | sed 's|refs/heads/||' | grep -v '^main$' | while read branch; do
             echo "Deleting branch: $branch"
-            git push origin --delete "$branch" || echo "Failed to delete $branch"
+            git push origin --delete "$branch" 2>&1 || echo "Warning: Failed to delete $branch"
           done
           
+          echo ""
           echo "Branch cleanup completed!"
+          echo ""
           echo "Remaining branches:"
           git ls-remote --heads origin

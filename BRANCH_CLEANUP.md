@@ -1,6 +1,12 @@
 # Branch Cleanup Guide
 
-This repository includes tools to delete all branches except the `main` branch.
+This repository includes multiple tools to delete all branches except the `main` branch.
+
+## Tools Provided
+
+- **`.github/workflows/cleanup-branches.yml`** - GitHub Actions workflow (automatic, no setup required)
+- **`cleanup-branches.py`** - Python script using GitHub API (requires token)
+- **`cleanup-branches.sh`** - Shell script using Git commands (requires Git authentication)
 
 ## Current Branches
 
@@ -22,9 +28,34 @@ As of the time this was created, the following branches exist in the repository:
 5. Confirm and run the workflow
 6. The workflow will delete all branches except `main`
 
-## Option 2: Using the Shell Script
+## Option 2: Using the Python Script (GitHub API)
 
-If you have local repository access with proper authentication:
+If you have a GitHub Personal Access Token with `repo` permissions:
+
+```bash
+# Install dependencies
+pip install requests
+
+# Run the Python script
+python cleanup-branches.py <your_github_token> varoonsahgal mcymt1-blackjack-20220307
+```
+
+The script will:
+1. Fetch all branches using the GitHub API
+2. List all branches that will be deleted
+3. Ask for confirmation
+4. Delete all branches except `main` using the API
+5. Display a summary of deleted and remaining branches
+
+To create a GitHub Personal Access Token:
+1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Click "Generate new token"
+3. Select the `repo` scope
+4. Generate and copy the token
+
+## Option 3: Using the Shell Script
+
+If you have local repository access with proper Git authentication:
 
 ```bash
 # Make sure you're in the repository directory
@@ -37,9 +68,9 @@ cd /path/to/mcymt1-blackjack-20220307
 The script will:
 1. List all branches that will be deleted
 2. Ask for confirmation
-3. Delete all branches except `main`
+3. Delete all branches except `main` using Git commands
 
-## Option 3: Manual Deletion
+## Option 4: Manual Deletion
 
 You can manually delete branches using git commands:
 
