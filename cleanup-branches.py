@@ -40,7 +40,7 @@ def delete_branch(owner, repo, branch_name, token):
             error_data = response.json()
             if 'message' in error_data:
                 error_msg = f"{error_msg}: {error_data['message']}"
-        except Exception:
+        except (ValueError, KeyError, requests.exceptions.JSONDecodeError):
             pass
         return False, error_msg
 
@@ -57,7 +57,7 @@ def main():
     print(f"Fetching branches from {owner}/{repo}...")
     try:
         branches = get_all_branches(owner, repo, token)
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Error fetching branches: {e}")
         sys.exit(1)
     
@@ -94,7 +94,7 @@ def main():
             else:
                 print(f"✗ Failed: {error}")
                 failed += 1
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             print(f"✗ Error: {e}")
             failed += 1
     
@@ -109,7 +109,7 @@ def main():
         print(f"Remaining branches ({len(remaining_branches)}):")
         for branch in remaining_branches:
             print(f"  - {branch['name']}")
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Error fetching remaining branches: {e}")
 
 if __name__ == "__main__":
