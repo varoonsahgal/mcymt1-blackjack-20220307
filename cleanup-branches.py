@@ -7,6 +7,7 @@ Example: python cleanup-branches.py ghp_xxxxx varoonsahgal mcymt1-blackjack-2022
 """
 
 import sys
+import json
 import requests
 
 def get_all_branches(owner, repo, token):
@@ -40,7 +41,7 @@ def delete_branch(owner, repo, branch_name, token):
             error_data = response.json()
             if 'message' in error_data:
                 error_msg = f"{error_msg}: {error_data['message']}"
-        except (ValueError, KeyError, requests.exceptions.JSONDecodeError):
+        except (ValueError, KeyError, json.JSONDecodeError):
             pass
         return False, error_msg
 
